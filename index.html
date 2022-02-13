@@ -16,6 +16,7 @@
     <style>
         * {
             font-family: 'Poppins';
+            font-size: 14px;
         }
 
         body {
@@ -160,6 +161,7 @@
 </svg>`,
         }
 
+        const date = new Date();
 
         const idGenerator = function () { // creates a unique ID
             return '_' + Math.random().toString(36).substr(2, 9);
@@ -174,7 +176,7 @@
             const accountBalance = document.getElementById("newAccountBalance")
                 .value; // gets the balance from the input
             if (accountHolder.trim().length === 0 || !accountBalance) { // checks if the form is valid
-                addToHistory("Invalid action!", svgHelper
+                addToHistory(`${date.getHours()}:${date.getMinutes()} - Invalid action!`, svgHelper
                     .invalid); // creates an invalid action entry in the history list
                 document.getElementById("newAccountHolder").style.backgroundColor =
                     "#ffdddd"; // alerts user to enter a valid input
@@ -186,7 +188,7 @@
                 document.getElementById("newAccountBalance").style.backgroundColor =
                     ""; // clears the from validation alerts 
                 addToHistory(
-                    `${accountHolder} has been added to the account list with the balance of ${accountBalance}₺.`,
+                    `${date.getHours()}:${date.getMinutes()} - ${accountHolder} has been added to the account list with the balance of ${accountBalance}₺.`,
                     svgHelper.success
                 ) // creates a new user entry in the history list 
                 setState("accountHolders", [ // updates the state with the given inputs
@@ -289,7 +291,7 @@
             if (moneySendingAccounts.find(x => x.selected === true).innerText === "From" | (moneyReceivingAccounts.find(
                     x => x.selected === true).innerText === "To") | amountInput.value ===
                 "") { // checks if the form is valid
-                addToHistory("Invalid action!", svgHelper
+                addToHistory(`${date.getHours()}:${date.getMinutes()} - Invalid action!`, svgHelper
                     .invalid); // creates an invalid action entry in the history list
                 document.getElementById("from-the-account-holder-list").style.backgroundColor =
                     "#ffdddd"; // alerts user to select a valid option
@@ -313,7 +315,7 @@
                     1; // finds the index of the current selected option to transfer money in
                 if (moneyReceivingAccountIndex ===
                     moneySendingAccountIndex) { // checks if the selected accounts are the same
-                    addToHistory("Invalid action!", svgHelper
+                    addToHistory(`${date.getHours()}:${date.getMinutes()} - Invalid action!`, svgHelper
                         .invalid); // creates an invalid action entry in the history list
                     return;
                 } else {
@@ -324,7 +326,7 @@
                     const transactionAmount = parseInt(amountInput
                         .value); // creates an integer from the amount inputs value
                     addToHistory(
-                        `${moneySendingAccount.innerText} just sent ${transactionAmount}₺ to ${moneyReceivingAccount.innerHTML}.`,
+                        `${date.getHours()}:${date.getMinutes()} - ${moneySendingAccount.innerText} just sent ${transactionAmount}₺ to ${moneyReceivingAccount.innerHTML}.`,
                         svgHelper.transfer) // creates a transction entry for the history list
                     state.accountHolders[moneySendingAccountIndex].balance = moneySendingValue -
                         transactionAmount; // updates the state for the account holder that transferred money out
