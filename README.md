@@ -1,1 +1,1 @@
-![WEEK2_HOMEWORK](https://raw.githubusercontent.com/patika-167-react-bootcamp/hw-week-2-dev-emr/main/hw2_emretemel.png)
+![WEEK2_HOMEWORK](https://raw.githubusercontent.com/patika-167-react-bootcamp/hw-week-2-dev-emr/main/hw2_emre_temel.png)
