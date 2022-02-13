@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-çözüm Transctional Services Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Poppins';
+        }
+
+        body {
+            background: #FFFFFF;
+            background: -moz-linear-gradient(-45deg, #FFFFFF 0%, #FFFFFF 21%, #8DCE6C 100%) fixed;
+            background: -webkit-linear-gradient(-45deg, #FFFFFF 0%, #FFFFFF 21%, #8DCE6C 100%) fixed;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 21%, #8DCE6C 100%) fixed;
+
+        }
+
+        .kart {
+            border-radius: 15px;
+            -webkit-box-shadow: 5px 11px 15px -1px rgba(138, 138, 138, 0.27);
+            box-shadow: 5px 11px 15px -1px rgba(138, 138, 138, 0.27);
+            background-color: rgba(255, 255, 255, 0.50);
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+        ul li {
+            background-color: transparent !important;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-light" style="background-color:transparent!important;">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://www.ecozum.com.tr/wp-content/uploads/2018/04/e%C3%A7%C3%B6z%C3%BCm-logo.png"
+                    height="40">
+            </a>
+        </div>
+    </nav>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-4">
+                <div class="kart">
+                    <div class="container p-3">
+                        <p>Create a user entry</p>
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="row">
+                                    <div class="col mb-1"><input type="text" class="form-control" placeholder="Name"
+                                            id="newAccountHolder">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mt-1"><input type="number" class="form-control"
+                                            placeholder="Balance" id="newAccountBalance">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-outline-success" onclick="newAccountHolder()"
+                                    style="height: 100%;">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="kart">
+                    <div class="container p-3">
+                        <p>Money Transfer</p>
+                        <div class="row">
+                            <div class="col mb-1">
+                                <select id="from-the-account-holder-list" class="form-select"
+                                    aria-label="Default select example">
+                                    <option selected>From</option>
+                                </select>
+                            </div>
+                            <div class="col mb-1"><input type="number" class="form-control" id="transactional-amount"
+                                    placeholder="Amount"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col mt-1">
+                                <select id="send-to-account-holder-list" class="form-select"
+                                    aria-label="Default select example">
+                                    <option selected>To</option>
+                                </select>
+                            </div>
+                            <div class="col mt-1">
+                                <button type="button" onclick="transactionalAction()" class="btn btn-success"
+                                    style="width: 100%;">
+                                    Send
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-send mx-1" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-4 p-2">
+                <div class="kart">
+                    <div class="container p-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                style="font-weight: 500;">
+                                Customer
+                                <span>Total Balance</span>
+                            </li>
+                        </ul>
+                        <ul class="list-group list-group-flush" id="account-holders-list">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8 p-2">
+                <div class="kart">
+                    <div class="container p-3">
+                        <ul class="list-group list-group-flush" id="history-list">
+                            <li class="list-group-item" style="font-weight: 500;">History</li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var idGenerator = function () { // creates a unique ID
+            return '_' + Math.random().toString(36).substr(2, 9);
+        };
+
+        const state = { // state object
+            accountHolders: [],
+        };
+
+        function newAccountHolder() { // creates a new account and adds to the state object
+            const accountHolder = document.getElementById("newAccountHolder").value; // gets the name from the input
+            const accountBalance = document.getElementById("newAccountBalance")
+                .value; // gets the balance from the input
+            if (accountHolder.trim().length === 0 || !accountBalance) { // checks if the form is valid
+                addToHistory("Invalid action!"); // creates an invalid action entry in the history list
+                document.getElementById("newAccountHolder").style.backgroundColor =
+                    "#ffdddd"; // alerts user to enter a valid input
+                document.getElementById("newAccountBalance").style.backgroundColor =
+                    "#ffdddd"; // alerts user to enter a valid balance
+            } else {
+                document.getElementById("newAccountHolder").style.backgroundColor =
+                    ""; // clears the from validation alerts 
+                document.getElementById("newAccountBalance").style.backgroundColor =
+                    ""; // clears the from validation alerts 
+                addToHistory(
+                    `${accountHolder} is just added to the account list with the balance of ${accountBalance}₺.`
+                ) // creates a new user entry in the history list 
+                setState("accountHolders", [ // updates the state with the given inputs
+                    ...state.accountHolders,
+                    {
+                        name: accountHolder,
+                        balance: parseInt(accountBalance),
+                    },
+                ]);
+            }
+        }
+
+        function setState(stateName, newValue) { // state update function,
+            state[stateName] = newValue;
+            renderAccountHolders(); // renders the accountants list
+            renderToSelectTag(); // renders a list of option tags inside the select tag for transactions
+            const accountHolder = document.getElementById("newAccountHolder").value = ""; // empties the name input
+            const accountBalance = document.getElementById("newAccountBalance").value = ""; // empties the balance input
+        }
+
+        function renderAccountHolders() { // renders the account holders list
+            const accountHoldersList = [document.getElementById(
+                "account-holders-list")]; // gets the account holders ul element from the dom
+            accountHoldersList.forEach(function (
+                accountHolder) { // iterates the ul element to create li elements inside
+                accountHolder.innerHTML = ""; // clears the existing entries on every new render
+                listAccounts(state.accountHolders,
+                    accountHolder); // adds li elements with respect to the account holders
+            })
+        }
+
+        function renderToSelectTag() { // renders a list of option tags inside the select tag for transactions
+            const accountHoldersList = [document.getElementById("send-to-account-holder-list"), document.getElementById(
+                "from-the-account-holder-list")]; // gets the respective select elements from the dom
+            accountHoldersList.forEach(function (
+                accountHolder) { // iterates the select element to create option elements inside
+                if (accountHolder.getAttribute("id") ===
+                    "send-to-account-holder-list") { // picks the senders select element
+                    accountHolder.innerHTML = "<option selected>To</option>"; // creates a placeholder for UX
+                    selectAccounts(state.accountHolders,
+                        accountHolder); // adds select elements with respect to the account holders
+                } else { // picks the receivers select element
+                    accountHolder.innerHTML = "<option selected>From</option>"; // creates a placeholder for UX
+                    selectAccounts(state.accountHolders,
+                        accountHolder); // adds select elements with respect to the account holders
+                }
+            })
+        }
+
+        function addToHistory(
+            message) { // renders a new entry for history list with message param to be given on the action
+            const historyList = document.getElementById(
+                "history-list"); // gets the history list ul element from the dom
+            const historyData = document.createElement("li"); // creates a li element for a single entry
+            historyData.innerText = message; // adds the message param to inside of the li element
+            historyData.className = "list-group-item"; // adds the respective bootstrap class to the li element
+            const historyDataId = idGenerator(); // creates a unique id for the li element
+            historyData.setAttribute("data-id", historyDataId); // assigns the id to the li element
+            historyList.appendChild(historyData); // adds the created li element inside to the history list ul element
+        }
+
+        function listAccounts(list, accountHolder) { // creates a new li element for the list of account holders
+            list.forEach(function (
+                item) { // iterates the account holders list and creates a li element for every account holder
+                const newListItem = document.createElement("li"); // creates a li element
+                const listId = idGenerator(); // creates a unique id for the li element
+                newListItem.innerHTML = item.name + "<span>" + item.balance +
+                    " ₺</span>"; // renders the account holders name and the current balance
+                newListItem.setAttribute("data-id", listId); // assigns the id to the li element
+                newListItem.className =
+                    "list-group-item d-flex justify-content-between align-items-center"; // adds the respective bootstrap class to the li element
+                accountHolder.appendChild(
+                    newListItem); // adds the created li element inside to the account holders list
+            })
+        }
+
+        function selectAccounts(list,
+            accountHolder) { // creates a new option element for the select element for transactional purposes
+            list.forEach(function (
+                item
+            ) { // iterates the account holders list and creates a option element for every account holder
+                const newOptionItem = document.createElement("option"); // creates a new option element
+                const optionId = idGenerator(); // creates a unique id for the option element;
+                newOptionItem.value = item
+                    .balance // assigns the account holders balance to the value of the option element
+                newOptionItem.innerText = item.name; // adds the account holders name inside the option tag
+                newOptionItem.setAttribute("data-id", optionId); // assigns the id to the option element
+                accountHolder.appendChild(
+                    newOptionItem) // adds the created option element inside to the select element
+            })
+        }
+
+        function transactionalAction() { // responsible from transactions
+            const moneySendingAccounts = Array.from(document.getElementById("from-the-account-holder-list")
+                .children); // creates a list of potential money out transfer 
+            const moneyReceivingAccounts = Array.from(document.getElementById("send-to-account-holder-list")
+                .children); // creates a list of potential money in transfer
+            const amountInput = document.getElementById("transactional-amount"); // gets the amount input from the dom
+            if (moneySendingAccounts.find(x => x.selected === true).innerText === "From" | (moneyReceivingAccounts.find(
+                    x => x.selected === true).innerText === "To") | amountInput.value ===
+                "") { // checks if the form is valid
+                addToHistory("Invalid action!"); // creates an invalid action entry in the history list
+                document.getElementById("from-the-account-holder-list").style.backgroundColor =
+                    "#ffdddd"; // alerts user to select a valid option
+                document.getElementById("send-to-account-holder-list").style.backgroundColor =
+                    "#ffdddd"; // alerts user to select a valid option
+                amountInput.style.backgroundColor = "#ffdddd"; //alerts user to enter a valid input
+                return
+            } else {
+                document.getElementById("from-the-account-holder-list").style.backgroundColor =
+                    ""; // clears the from validation alerts 
+                document.getElementById("send-to-account-holder-list").style.backgroundColor =
+                    ""; // clears the from validation alerts 
+                amountInput.style.backgroundColor = ""; // clears the from validation alerts 
+                const moneySendingAccount = moneySendingAccounts.find(x => x.selected ===
+                    true); // finds the current selected option to transfer money out
+                const moneyReceivingAccount = moneyReceivingAccounts.find(x => x.selected ===
+                    true); // finds the current selected option to transfer money in
+                const moneySendingAccountIndex = moneySendingAccounts.indexOf(moneySendingAccount) -
+                    1; // finds the index of the current selected option to transfer money out
+                const moneyReceivingAccountIndex = moneyReceivingAccounts.indexOf(moneyReceivingAccount) -
+                    1; // finds the index of the current selected option to transfer money in
+                if (moneyReceivingAccountIndex ===
+                    moneySendingAccountIndex) { // checks if the selected accounts are the same
+                    addToHistory("Invalid action!"); // creates an invalid action entry in the history list
+                    return;
+                } else {
+                    const moneySendingValue = parseInt(moneySendingAccount
+                        .value); // creates an integer from the selected option tags value to transfer money out
+                    const moneyReceivingValue = parseInt(moneyReceivingAccount
+                        .value); // creates an integer from the selected option tags value to transfer money in
+                    const transactionAmount = parseInt(amountInput
+                        .value); // creates an integer from the amount inputs value
+                    addToHistory(
+                        `${moneySendingAccount.innerText} just sent ${transactionAmount}₺ to ${moneyReceivingAccount.innerHTML}.`
+                    ) // creates a transction entry for the history list
+                    state.accountHolders[moneySendingAccountIndex].balance = moneySendingValue -
+                        transactionAmount; // updates the state for the account holder that transferred money out
+                    state.accountHolders[moneyReceivingAccountIndex].balance = moneyReceivingValue +
+                        transactionAmount; // updates the state for the account that is transferred money in
+                    renderAccountHolders(); // renders the updated account holders list 
+                    renderToSelectTag
+                        (); // renders the updated list of option tags inside the select tag for transactions
+                    amountInput.value = "";
+                }
+
+            }
+
+        }
+    </script>
+</body>
+
+</html>
