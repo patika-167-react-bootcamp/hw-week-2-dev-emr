@@ -4,4 +4,4 @@ This project uses vanilla JS for its functionality. Bootstrap 5 is used for styl
 
 https://patika-167-react-bootcamp.github.io/hw-week-2-dev-emr/
 
-![WEEK2_HOMEWORK](https://raw.githubusercontent.com/patika-167-react-bootcamp/hw-week-2-dev-emr/main/emretemel_hw2_revised.png)
+![WEEK2_HOMEWORK](https://raw.githubusercontent.com/patika-167-react-bootcamp/hw-week-2-dev-emr/main/emre_temel_hw2_revised.png)
