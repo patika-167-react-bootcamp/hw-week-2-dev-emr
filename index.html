@@ -38,13 +38,69 @@
 
         ul li {
             background-color: transparent !important;
+
         }
 
         .undoBadge {
             font-weight: 400;
-            font-size: 12px;
+            font-size: 10px;
             background-color: #991B1B;
             cursor: pointer;
+            vertical-align: middle;
+        }
+
+        .iconset {
+            display: flex;
+            border: 1px solid white;
+            border-radius: 50%;
+        }
+
+        .dateElement {
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        .historyIcon {
+            width: 18px;
+            height: 18px;
+            vertical-align: bottom;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.50) !important;
+            border: 0 !important;
+            border-radius: 15px !important;
+
+        }
+
+        .transaction-history {
+            background-color: transparent !important;
+            font-size: 12px !important;
+        }
+
+        .transaction-history-error {
+            font-size: 12px !important;
+            font-style: italic;
+        }
+
+        .history {
+            font-size: 12px;
+        }
+
+        .form-check-input[type=checkbox] {
+            border-radius: 50%;
+        }
+
+        .btn-group-sm>.btn,
+        .btn-sm {
+            padding: 0.25rem 2rem !important;
+            font-size: .875rem;
+            border-radius: 0.2rem;
+        }
+
+        .form-check-input:checked {
+            background-color: #198754 !important;
+            border-color: #198754 !important;
         }
     </style>
 </head>
@@ -125,7 +181,7 @@
     </div>
     <div class="container mt-3">
         <div class="row">
-            <div class="col-4 p-2">
+            <div class="col-4">
                 <div class="kart">
                     <div class="container p-3">
                         <ul class="list-group list-group-flush">
@@ -140,29 +196,88 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8 p-2">
+            <div class="col-8">
                 <div class="kart">
                     <div class="container p-3">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item" style="font-weight: 500;">History</li>
+                        <div class="row">
+                            <div class="col-6">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item mt-1" style="font-weight: 500;">History</li>
 
-                        </ul>
-                        <ul class="list-group list-group-flush" id="history-list">
+                                </ul>
+                                <ul class="list-group list-group-flush" id="history-list">
 
-                        </ul>
+                                </ul>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="card" style="width: auto;">
+                                    <div class="card-body">
+                                        <p class="mb-3 text-end">Transaction History</h6>
+                                            <p class="card-text"><select class="form-select transaction-history"
+                                                    aria-label="Default select example" id="transaction-history-filter">
+                                                    <option id="first-item" selected>Select a customer</option>
+                                                </select></p>
+                                            <div class="d-flex justify-content-between align-items-center">
+
+                                                <div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                            id="received-checkbox">
+                                                        <label class="form-check-label transaction-history "
+                                                            for="received-checkbox">
+                                                            Received
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div class="form-check me-5">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                            id="send-checkbox">
+                                                        <label class="form-check-label transaction-history"
+                                                            for="send-checkbox">
+                                                            Sent
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <button type="button" onClick="fetchTransactions()"
+                                                        class="btn btn-outline-dark btn-sm"
+                                                        style="width: 100%!important;">List</button>
+
+
+                                                </div>
+                                            </div>
+                                            <ul class="list-group mt-3" id="transaction-history">
+                                                <li class="list-group-item transaction-history-error">Select a customer
+                                                    to see
+                                                    the transaction history</li>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
     <script>
-        const historyEntryIcon = { // history entry icons 
-            success: `<span style="font-size: 15px;">👍</span>`,
-            invalid: `<span style="font-size: 15px;">❗</span>`,
-            delete: `<span style="font-size: 15px;">👻</span>`
+        const iconSet = {
+            invalidAction: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/cancel.png"/>`,
+            userAdded: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/add--v1.png"/>`,
+            moneySent: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/circled-up-2.png"/>`,
+            userDeleted: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/trash--v1.png"/>`,
+            insufficientBalance: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/no-entry.png"/>`,
+            transactionCancelled: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/refresh--v1.png"/>`
         }
 
-        const date = new Date(); // new date object
+        function padTo2Digits(num) {
+            return String(num).padStart(2, '0');
+        }
 
         const idGenerator = function () { // creates a unique ID
             return Math.ceil(Math.random() * 100000 - 1);
@@ -181,8 +296,8 @@
             const accountBalance = document.getElementById("newAccountBalance")
                 .value; // gets the balance from the input
             if (accountHolder.trim().length === 0 || !accountBalance) { // checks if the form is valid
-                addToHistory(`${date.getHours()}:${date.getMinutes()} - Invalid action!`, historyEntryIcon
-                    .invalid); // creates an invalid action entry in the history list
+                addToHistory(`Invalid action!`, iconSet
+                    .invalidAction); // creates an invalid action entry in the history list
                 document.getElementById("newAccountHolder").style.backgroundColor =
                     "#ffdddd"; // alerts user to enter a valid input
                 document.getElementById("newAccountBalance").style.backgroundColor =
@@ -193,14 +308,14 @@
                 document.getElementById("newAccountBalance").style.backgroundColor =
                     ""; // clears the from validation alerts 
                 addToHistory(
-                    `${date.getHours()}:${date.getMinutes()} - ${accountHolder} has been added to the account list with the balance of ${accountBalance}₺.`,
-                    historyEntryIcon.success
+                    `${accountHolder[0].toUpperCase() + accountHolder.substring(1)} has been added to the account list with the balance of ${accountBalance}₺.`,
+                    iconSet.userAdded
                 ) // creates a new user entry in the history list 
                 const uniqueId = idGenerator()
                 setState("accountHolders", [ // updates the state with the given inputs
                     ...state.accountHolders,
                     {
-                        name: accountHolder,
+                        name: accountHolder[0].toUpperCase() + accountHolder.substring(1),
                         balance: parseInt(accountBalance),
                         accountId: uniqueId
                     },
@@ -208,7 +323,99 @@
             }
         }
 
+        function fetchTransactions() {
+            const transactionHistorySelect = Array.from(document.getElementById("transaction-history-filter"));
+            const sendCheckBox = document.getElementById("send-checkbox");
+            const receivedCheckBox = document.getElementById("received-checkbox");
+            const customerId = transactionHistorySelect.find(x => x.selected === true).id
+            console.log(customerId)
+            if (customerId === "first-item") {
+                transactionHistoryError(`Please select a customer.`);
+            }
+            if (customerId !== "first-item" & sendCheckBox.checked === false &
+                receivedCheckBox
+                .checked === false) {
+                transactionHistoryError(`Please select an option`);
+            }
+            if (customerId !== "first-item" & sendCheckBox.checked === true &
+                receivedCheckBox
+                .checked === false) {
+                renderToTransactionHistory(parseInt(customerId), true, false)
+            }
+            if (customerId !== "first-item" & sendCheckBox.checked === false &
+                receivedCheckBox
+                .checked === true) {
+                renderToTransactionHistory(parseInt(customerId), false, true)
+            }
+            if (customerId !== "first-item" & sendCheckBox.checked === true &
+                receivedCheckBox
+                .checked === true) {
+                renderToTransactionHistory(parseInt(customerId), true, true)
+            }
 
+        }
+
+        function renderReceivingHistory(id) {
+            console.log("receiveeer")
+            if (!transactionState.transactionHistory.find(x => x.moneyReceiverId === id)) {
+                transactionHistoryError(`No transaction history`);
+            } else {
+                transactionState.transactionHistory.map(function (item) {
+                    if (item.moneyReceiverId === id) {
+                        const newItemList = document.createElement("li");
+                        newItemList.innerHTML =
+                            `${item.moneyReceiverName} received ${item.transactionAmount}₺ from ${item.moneySenderName} at ${item.currentDate}`;
+                        newItemList.className = "list-group-item transaction-history"
+                        transactionalHistoryElement.appendChild(newItemList);
+                    } else {
+                        return
+                    }
+                })
+            }
+        }
+
+        function renderSendingHistory(id) {
+            if (!transactionState.transactionHistory.find(x => x.moneySenderId === id)) {
+                transactionHistoryError(`No transaction history`);
+            } else {
+                transactionState.transactionHistory.map(function (item) {
+                    if (item.moneySenderId === id) {
+                        const newItemList = document.createElement("li");
+                        newItemList.innerHTML =
+                            `${item.moneySenderName} sent ${item.transactionAmount}₺ to ${item.moneyReceiverName} at ${item.currentDate}`;
+                        newItemList.className = "list-group-item transaction-history"
+                        transactionalHistoryElement.appendChild(newItemList);
+                    } else {
+                        return
+                    }
+                })
+            }
+        }
+
+        function renderToTransactionHistory(id, send, receive) {
+            transactionalHistoryElement = document.getElementById("transaction-history");
+            transactionalHistoryElement.innerHTML = "";
+            if (send === false & receive === true) {
+                renderReceivingHistory(id)
+            }
+            if (send === true & receive === false) {
+                renderSendingHistory(id)
+
+            }
+            if (send === true & receive === true) {
+                renderSendingHistory(id)
+                renderReceivingHistory(id)
+            }
+        }
+
+        function transactionHistoryError(msg) {
+            transactionalHistoryElement = document.getElementById("transaction-history");
+            transactionalHistoryElement.innerHTML = "";
+            errorMessage = document.createElement("li");
+            errorMessage.innerHTML = msg;
+            errorMessage.className = "list-group-item transaction-history-error";
+            transactionalHistoryElement.appendChild(errorMessage);
+        }
 
         function setState(stateName, newValue) { // state update function,
             state[stateName] = newValue;
@@ -231,7 +438,8 @@
 
         function renderToSelectTag() { // renders a list of option tags inside the select tag for transactions
             const accountHoldersList = [document.getElementById("send-to-account-holder-list"), document.getElementById(
-                "from-the-account-holder-list")]; // gets the respective select elements from the dom
+                "from-the-account-holder-list"), document.getElementById(
+                "transaction-history-filter")]; // gets the respective select elements from the dom
             accountHoldersList.forEach(function (
                 accountHolder) { // iterates the select element to create option elements inside
                 if (accountHolder.getAttribute("id") ===
@@ -239,25 +447,18 @@
                     accountHolder.innerHTML = "<option selected>To</option>"; // creates a placeholder for UX
                     selectAccounts(state.accountHolders,
                         accountHolder); // adds select elements with respect to the account holders
-                } else { // picks the receivers select element
+                }
+                if ((accountHolder.getAttribute("id") ===
+                        "from-the-account-holder-list")) { // picks the receivers select element
                     accountHolder.innerHTML = "<option selected>From</option>"; // creates a placeholder for UX
+                    selectAccounts(state.accountHolders,
+                        accountHolder); // adds select elements with respect to the account holders
+                } else {
+                    accountHolder.innerHTML = "<option selected>Select a customer</option>";
                     selectAccounts(state.accountHolders,
                         accountHolder); // adds select elements with respect to the account holders
                 }
             })
-        }
-
-        function addToHistory(
-            message, svgElement) { // renders a new entry for history list with message param to be given on the action
-            const historyList = document.getElementById(
-                "history-list"); // gets the history list ul element from the dom
-            const historyData = document.createElement("li"); // creates a li element for a single entry
-            historyData.innerHTML = message + svgElement; // adds the message param to inside of the li element
-            historyData.className =
-                "list-group-item d-flex justify-content-between align-items-center p-3"; // adds the respective bootstrap class to the li element
-            const historyDataId = idGenerator(); // creates a unique id for the li element
-            historyData.setAttribute("data-id", historyDataId); // assigns the id to the li element
-            historyList.prepend(historyData); // adds the created li element inside to the history list ul element
         }
 
         function listAccounts(list, accountHolder) { // creates a new li element for the list of account holders
@@ -279,10 +480,29 @@
             })
         }
 
+        function addToHistory(
+            message, svgElement) { // renders a new entry for history list with message param to be given on the action
+            const historyList = document.getElementById(
+                "history-list"); // gets the history list ul element from the dom
+            const historyData = document.createElement("li"); // creates a li element for a single entry
+            const date = new Date();
+            const currentDate = padTo2Digits(date.getHours()) + ':' + padTo2Digits(date.getMinutes());
+            const currentDateSpan = `<span class="dateElement ms-3">${currentDate}</span>`
+            historyData.innerHTML = '<span class="history">' + svgElement + message + "</span>" +
+                currentDateSpan; // adds the message param to inside of the li element
+            historyData.className =
+                "list-group-item d-flex justify-content-between align-items-center"; // adds the respective bootstrap class to the li element
+            const historyDataId = idGenerator(); // creates a unique id for the li element
+            historyData.setAttribute("data-id", historyDataId); // assigns the id to the li element
+            historyList.prepend(historyData); // adds the created li element inside to the history list ul element
+        }
+
+
+
         function deleteUser(index) { // deletes a user from the current state
             addToHistory(
-                `${date.getHours()}:${date.getMinutes()} - ${state.accountHolders[index].name} has been removed!`,
-                historyEntryIcon.delete) // creates a user removal history entry
+                `${state.accountHolders[index].name} has been removed!`,
+                iconSet.userDeleted) // creates a user removal history entry
             state.accountHolders.splice(index, 1); // removes the targeted user from the state
             renderAccountHolders(); // rerenders the account holder list
             renderToSelectTag() // rerenders the select tags
@@ -297,6 +517,7 @@
                 const optionId = idGenerator(); // creates a unique id for the option element;
                 newOptionItem.value = item
                     .balance // assigns the account holders balance to the value of the option element
+                newOptionItem.id = item.accountId;
                 newOptionItem.innerText = item.name; // adds the account holders name inside the option tag
                 newOptionItem.setAttribute("data-id", optionId); // assigns the id to the option element
                 accountHolder.appendChild(
@@ -313,8 +534,8 @@
             if (moneySendingAccounts.find(x => x.selected === true).innerText === "From" | (moneyReceivingAccounts.find(
                     x => x.selected === true).innerText === "To") | amountInput.value ===
                 "") { // checks if the form is valid
-                addToHistory(`${date.getHours()}:${date.getMinutes()} - Invalid action!`, historyEntryIcon
-                    .invalid); // creates an invalid action entry in the history list
+                addToHistory(`Invalid action!`, iconSet
+                    .invalidAction); // creates an invalid action entry in the history list
                 document.getElementById("from-the-account-holder-list").style.backgroundColor =
                     "#ffdddd"; // alerts user to select a valid option
                 document.getElementById("send-to-account-holder-list").style.backgroundColor =
@@ -337,40 +558,60 @@
                     1; // finds the index of the current selected option to transfer money in
                 if (moneyReceivingAccountIndex ===
                     moneySendingAccountIndex) { // checks if the selected accounts are the same
-                    addToHistory(`${date.getHours()}:${date.getMinutes()} - Invalid action!`, historyEntryIcon
-                        .invalid); // creates an invalid action entry in the history list
+                    addToHistory(`Invalid action!`, iconSet
+                        .invalidAction); // creates an invalid action entry in the history list
                     return;
                 } else {
                     const moneySendingValue = parseInt(moneySendingAccount
                         .value); // creates an integer from the selected option tags value to transfer money out
                     const moneySenderId = state.accountHolders[moneySendingAccountIndex].accountId;
+                    const moneySenderName = state.accountHolders[moneySendingAccountIndex].name;
                     const moneyReceiverId = state.accountHolders[moneyReceivingAccountIndex].accountId;
+                    const moneyReceiverName = state.accountHolders[moneyReceivingAccountIndex].name;
                     const moneyReceivingValue = parseInt(moneyReceivingAccount
                         .value); // creates an integer from the selected option tags value to transfer money in
                     const transactionAmount = parseInt(amountInput
                         .value); // creates an integer from the amount inputs value
-                    const badgeId = idGenerator();
-                    setTransactionState("transactionHistory",
-                        [ // updates the transactional history state with the given inputs
-                            ...transactionState.transactionHistory,
-                            {
-                                transactionId: badgeId, // the id of the undo badge that is created
-                                moneySenderId, // money senders id added to the transactional history state
-                                moneyReceiverId, // money receivers id added to the transactional history state
-                            },
-                        ]);
-                    addToHistory(
-                        `${date.getHours()}:${date.getMinutes()} - ${moneySendingAccount.innerText} just sent ${transactionAmount}₺ to ${moneyReceivingAccount.innerHTML}.`,
-                        `<span class="badge bg-danger undoBadge" id="${badgeId}" onClick="undoTransaction(${badgeId}, ${transactionAmount}); this.remove();">UNDO</span>`
-                    ) // creates a transction entry for the history list and an undo badge with the undo transaction function and removes the badge after it's clicked
-                    state.accountHolders[moneySendingAccountIndex].balance = moneySendingValue -
-                        transactionAmount; // updates the state for the account holder that transferred money out
-                    state.accountHolders[moneyReceivingAccountIndex].balance = moneyReceivingValue +
-                        transactionAmount; // updates the state for the account that is transferred money in
-                    renderAccountHolders(); // renders the updated account holders list 
-                    renderToSelectTag
-                        (); // renders the updated list of option tags inside the select tag for transactions
-                    amountInput.value = "";
+
+                    if (transactionAmount > moneySendingValue) {
+                        addToHistory(
+                            `Insufficient balance!`,
+                            iconSet.insufficientBalance);
+                        return;
+                    } else {
+
+                        const badgeId = idGenerator();
+                        const date = new Date();
+                        const transactionTime = date.getTime();
+                        const currentDate = padTo2Digits(date.getHours()) + ':' + padTo2Digits(date.getMinutes());
+                        setTransactionState("transactionHistory",
+                            [ // updates the transactional history state with the given inputs
+                                ...transactionState.transactionHistory,
+                                {
+                                    transactionId: badgeId, // the id of the undo badge that is created
+                                    moneySenderId, // money senders id added to the transactional history state
+                                    moneyReceiverId, // money receivers id added to the transactional history state
+                                    transactionTime,
+                                    currentDate,
+                                    moneySenderName,
+                                    moneyReceiverName,
+                                    transactionAmount,
+                                },
+                            ]);
+                        addToHistory(
+                            `${moneySendingAccount.innerText} just sent ${transactionAmount}₺ to ${moneyReceivingAccount.innerHTML}. <span class="badge bg-danger undoBadge ms-1" id="${badgeId}" onClick="undoTransaction(${badgeId}, ${transactionAmount}); this.remove();">Undo</span>`,
+                            iconSet.moneySent
+                        ) // creates a transction entry for the history list and an undo badge with the undo transaction function and removes the badge after it's clicked
+                        state.accountHolders[moneySendingAccountIndex].balance = moneySendingValue -
+                            transactionAmount; // updates the state for the account holder that transferred money out
+                        state.accountHolders[moneyReceivingAccountIndex].balance = moneyReceivingValue +
+                            transactionAmount; // updates the state for the account that is transferred money in
+                        renderAccountHolders(); // renders the updated account holders list 
+                        renderToSelectTag
+                            (); // renders the updated list of option tags inside the select tag for transactions
+                        amountInput.value = "";
+                    }
+
                 }
 
             }
@@ -391,11 +632,13 @@
                     transactionAmount; // undoes the transaction
                 state.accountHolders.find(x => x.accountId === currentAction[0].moneyReceiverId).balance -=
                     transactionAmount; // undoes the transaction
+                addToHistory(
+                    `Transfer cancelled.`,
+                    iconSet.transactionCancelled)
                 renderToSelectTag(); // rerenders the select tag
                 renderAccountHolders(); // rerenders the account holders list
             } else {
-                addToHistory(`${date.getHours()}:${date.getMinutes()} - Invalid action!`, historyEntryIcon
-                    .invalid); // creates an invalid history entry 
+                addToHistory(`Invalid action!`, iconSet.invalidAction); // creates an invalid history entry 
             }
         }
     </script>
