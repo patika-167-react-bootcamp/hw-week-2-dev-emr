@@ -356,55 +356,71 @@
         }
 
         function renderReceivingHistory(id) {
-            console.log("receiveeer")
-            if (!transactionState.transactionHistory.find(x => x.moneyReceiverId === id)) {
-                transactionHistoryError(`No transaction history`);
-            } else {
-                transactionState.transactionHistory.map(function (item) {
-                    if (item.moneyReceiverId === id) {
-                        const newItemList = document.createElement("li");
-                        newItemList.innerHTML =
-                            `${item.moneyReceiverName} received ${item.transactionAmount}₺ from ${item.moneySenderName} at ${item.currentDate}`;
-                        newItemList.className = "list-group-item transaction-history"
-                        transactionalHistoryElement.appendChild(newItemList);
-                    } else {
-                        return
-                    }
-                })
-            }
+            transactionState.transactionHistory.map(function (item) {
+                if (item.moneyReceiverId === id) {
+                    const newItemList = document.createElement("li");
+                    newItemList.innerHTML =
+                        `${item.moneyReceiverName} received ${item.transactionAmount}₺ from ${item.moneySenderName} at ${item.currentDate}`;
+                    newItemList.className = "list-group-item transaction-history"
+                    transactionalHistoryElement.appendChild(newItemList);
+                } else {
+                    return
+                }
+            })
         }
 
+
+
         function renderSendingHistory(id) {
-            if (!transactionState.transactionHistory.find(x => x.moneySenderId === id)) {
-                transactionHistoryError(`No transaction history`);
-            } else {
-                transactionState.transactionHistory.map(function (item) {
-                    if (item.moneySenderId === id) {
-                        const newItemList = document.createElement("li");
-                        newItemList.innerHTML =
-                            `${item.moneySenderName} sent ${item.transactionAmount}₺ to ${item.moneyReceiverName} at ${item.currentDate}`;
-                        newItemList.className = "list-group-item transaction-history"
-                        transactionalHistoryElement.appendChild(newItemList);
-                    } else {
-                        return
-                    }
-                })
-            }
+            transactionState.transactionHistory.map(function (item) {
+                if (item.moneySenderId === id) {
+                    const newItemList = document.createElement("li");
+                    newItemList.innerHTML =
+                        `${item.moneySenderName} sent ${item.transactionAmount}₺ to ${item.moneyReceiverName} at ${item.currentDate}`;
+                    newItemList.className = "list-group-item transaction-history"
+                    transactionalHistoryElement.appendChild(newItemList);
+                } else {
+                    return
+                }
+            })
         }
+
 
         function renderToTransactionHistory(id, send, receive) {
             transactionalHistoryElement = document.getElementById("transaction-history");
             transactionalHistoryElement.innerHTML = "";
             if (send === false & receive === true) {
-                renderReceivingHistory(id)
+                if (!transactionState.transactionHistory.find(x => x.moneyReceiverId === id)) {
+                    transactionHistoryError(`No transaction history`);
+                } else {
+                    renderReceivingHistory(id)
+                }
             }
             if (send === true & receive === false) {
-                renderSendingHistory(id)
-
+                if (!transactionState.transactionHistory.find(x => x.moneySenderId === id)) {
+                    transactionHistoryError(`No transaction history`);
+                } else {
+                    renderSendingHistory(id)
+                }
             }
             if (send === true & receive === true) {
-                renderSendingHistory(id)
-                renderReceivingHistory(id)
+                if (!transactionState.transactionHistory.find(x => x.moneySenderId === id) & !transactionState
+                    .transactionHistory.find(x => x.moneyReceiverId === id)) {
+                    transactionHistoryError(`No transaction history`);
+                }
+                if (transactionState.transactionHistory.find(x => x.moneySenderId === id) & !transactionState
+                    .transactionHistory.find(x => x.moneyReceiverId === id)) {
+                    transactionHistoryError(`No sending history found`);
+                    renderReceivingHistory(id);
+                }
+                if (!transactionState.transactionHistory.find(x => x.moneySenderId === id) & transactionState
+                    .transactionHistory.find(x => x.moneyReceiverId === id)) {
+                    transactionHistoryError(`No receiving history found`);
+                    renderSendingHistory(id);
+                } else {
+                    renderSendingHistory(id);
+                    renderReceivingHistory(id);
+                }
             }
         }
 
