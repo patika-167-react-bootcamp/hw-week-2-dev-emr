@@ -635,10 +635,9 @@
                         additionalRenderBasket(state.accountHolders[accountIndex].accountId);
                     } else {
                         const currentBasket = state.accountHolders.find(x => x.accountId == customerId).basket;
-                        console.log(currentBasket)
+
                         const sameProducts = currentBasket.filter(x => x.id == productId);
-                        console.log(sameProducts)
-                        console.log(sameProducts.length)
+
                         if (sameProducts.length >= targetProduct.stock) {
                             setHistoryState("history", [
                                 ...historyState.history, {
@@ -693,7 +692,7 @@
             const sendCheckBox = document.getElementById("send-checkbox");
             const receivedCheckBox = document.getElementById("received-checkbox");
             const customerId = transactionHistorySelect.find(x => x.selected === true).id
-            console.log(customerId)
+
             if (customerId === "first-item") {
                 transactionHistoryError(`Please select a customer.`);
             }
@@ -822,12 +821,12 @@
                 "from-the-account-holder-list"), document.getElementById(
                 "transaction-history-filter"), document.getElementById(
                 "show-basket")]; // gets the respective select elements from the dom
-            console.log(accountHoldersList.map((item) => console.log(item.getAttribute("id"))));
+
             accountHoldersList.forEach(function (
                 accountHolder) { // iterates the select element to create option elements inside
                 if (accountHolder.getAttribute("id") ===
                     "send-to-account-holder-list") { // picks the senders select element
-                    console.log(1)
+
                     accountHolder.innerHTML = "<option selected>To</option>"; // creates a placeholder for UX
                     selectAccounts(state.accountHolders,
                         accountHolder); // adds select elements with respect to the account holders
@@ -840,7 +839,7 @@
                 }
                 if (accountHolder.getAttribute("id") ===
                     "transaction-history-filter") { // picks the receivers select element
-                    console.log(accountHolder)
+
                     accountHolder.innerHTML =
                         '<option selected>Select a customer</option>'; // creates a placeholder for UX
                     selectAccounts(state.accountHolders,
@@ -881,7 +880,7 @@
         function renderHistoryList(list) {
 
             document.getElementById("history-list").innerHTML = ""
-            console.log(list);
+
             list.forEach((item) => {
                 const historyList = document.getElementById("history-list");
                 const historyData = document.createElement("li");
@@ -936,7 +935,7 @@
 
         function selectBasketAccounts(list,
             accountHolder) { // creates a new option element for the select element for transactional purposes
-            console.log(list)
+
             list.forEach(function (
                 item
             ) { // iterates the account holders list and creates a option element for every account holder
