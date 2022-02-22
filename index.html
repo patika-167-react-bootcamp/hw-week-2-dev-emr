@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-çözüm Transctional Services Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Poppins';
+            font-size: 12px;
+        }
+
+        body {
+            background: #FFFFFF;
+            background: -moz-linear-gradient(-45deg, #FFFFFF 0%, #FFFFFF 21%, #8DCE6C 100%) fixed;
+            background: -webkit-linear-gradient(-45deg, #FFFFFF 0%, #FFFFFF 21%, #8DCE6C 100%) fixed;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 21%, #8DCE6C 100%) fixed;
+
+        }
+
+        .kart {
+            border-radius: 15px;
+            -webkit-box-shadow: 5px 11px 15px -1px rgba(138, 138, 138, 0.27);
+            box-shadow: 5px 11px 15px -1px rgba(138, 138, 138, 0.27);
+            background-color: rgba(255, 255, 255, 0.50);
+            max-height: 200px;
+            overflow-y: scroll;
+        }
+
+        ul li {
+            background-color: transparent !important;
+
+        }
+
+        .undoBadge {
+            font-weight: 400;
+            font-size: 10px;
+            background-color: #991B1B;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        .iconset {
+            display: flex;
+            border: 1px solid white;
+            border-radius: 50%;
+        }
+
+        .dateElement {
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        .historyIcon {
+            width: 18px;
+            height: 18px;
+            vertical-align: bottom;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.50) !important;
+            border: 0 !important;
+            border-radius: 15px !important;
+
+        }
+
+        .transaction-history {
+            background-color: transparent !important;
+            font-size: 12px !important;
+        }
+
+        .transaction-history-error {
+            font-size: 12px !important;
+            font-style: italic;
+        }
+
+        .history {
+            font-size: 12px;
+        }
+
+        .form-check-input[type=checkbox] {
+            border-radius: 50%;
+        }
+
+        .btn-group-sm>.btn,
+        .btn-sm {
+            padding: 0.25rem 2rem !important;
+            font-size: .875rem;
+            border-radius: 0.2rem;
+        }
+
+        .form-check-input:checked {
+            background-color: #198754 !important;
+            border-color: #198754 !important;
+        }
+
+        .product-name {
+            font-size: 14px;
+        }
+
+        .product-cost {
+            font-size: 16px;
+            color: #198754
+        }
+
+        .list-group-item {
+            background-color: transparent !important;
+        }
+
+        .list-group-item:hover {
+            background-color: rgba(25, 135, 84, 0.2) !important;
+        }
+    </style>
+</head>
+
+<body o>
+    <nav class="navbar navbar-light bg-light" style="background-color:transparent!important;">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://www.ecozum.com.tr/wp-content/uploads/2018/04/e%C3%A7%C3%B6z%C3%BCm-logo.png"
+                    height="40">
+            </a>
+        </div>
+    </nav>
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="kart">
+                            <div class="container p-4">
+                                <p style="font-weight: 500;">Add Customer</p>
+                                <div class="row">
+                                    <div class="col mb-2"><input type="text" class="form-control" placeholder="Name"
+                                            id="newAccountHolder">
+                                    </div>
+
+                                    <div class="col mb-1"><input type="number" class="form-control"
+                                            placeholder="Balance" id="newAccountBalance">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mt-1">
+                                        <button type="button" class="btn btn-outline-success"
+                                            onclick="newAccountHolder()" style="width: 100%;">Add</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mt-3">
+                        <div class="kart">
+                            <div class="container p-4">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center"
+                                        style="font-weight: 500;">
+                                        Customer
+                                        <span>Total Balance</span>
+                                    </li>
+                                </ul>
+                                <ul class="list-group list-group-flush" id="account-holders-list">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mt-3">
+                        <div class="kart">
+                            <div class="container p-4">
+                                <div class="col">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p style="font-weight: 500;">
+                                            Transaction History</p>
+
+                                    </div>
+
+                                    <p class="card-text"><select class="form-select transaction-history"
+                                            aria-label="Default select example" id="transaction-history-filter">
+                                            <option id="first-item" selected>Select a customer</option>
+                                        </select></p>
+                                    <div class="d-flex justify-content-between align-items-center">
+
+                                        <div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                    id="received-checkbox">
+                                                <label class="form-check-label transaction-history "
+                                                    for="received-checkbox">
+                                                    Received
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                    id="send-checkbox">
+                                                <label class="form-check-label transaction-history" for="send-checkbox">
+                                                    Sent
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button type="button" onClick="fetchTransactions()"
+                                                class="btn btn-outline-dark btn-sm"
+                                                style="width: 100%!important;">List</button>
+
+
+                                        </div>
+                                    </div>
+                                    <ul class="list-group mt-3" id="transaction-history">
+                                        <li class="list-group-item transaction-history-error">Select a customer
+                                            to see
+                                            the transaction history</li>
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="kart">
+                            <div class="container p-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p style="font-weight: 500;">Money Transfer</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col mb-1">
+                                        <select id="from-the-account-holder-list" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>From</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col mb-1">
+                                        <select id="send-to-account-holder-list" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>To</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mb-1"><input type="number" class="form-control"
+                                            id="transactional-amount" placeholder="Amount"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" onclick="transactionalAction()" class="btn btn-success"
+                                            style="width: 100%;">
+                                            Send
+                                            <svg width="16" height="16" fill="currentColor" class="bi bi-send mx-1"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mt-3">
+                        <div class="kart" style="max-height: 350px!important;">
+                            <div class="container p-3">
+                                <div class="row">
+                                    <div class="col">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item mt-1" style="font-weight: 500;">History</li>
+
+                                        </ul>
+                                        <ul class="list-group list-group-flush" id="history-list">
+
+                                        </ul>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="kart">
+                            <div class="container p-4" id="product-detail">
+                                <p style="font-weight: 500;">Product detail</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="product-name">Monstera</span><span
+                                        class="badge bg-danger undoBadge">Last 24 on stock</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="product-cost">184₺</span><span onClick="addToBasket(0)"
+                                        style="text-decoration: underline; cursor: pointer;">Add
+                                        to basket ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mt-3">
+                        <div class="kart" style="max-height: 500px;">
+                            <div class="container p-4">
+                                <p style="font-weight: 500;">Product List</p>
+                                <ol class="list-group list-group-numbered" id="products-list">
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="kart">
+                            <div class="container p-4">
+                                <select id="show-basket" class="form-select" aria-label="Default select example"
+                                    onchange="renderBasketDetail(event)">
+                                    <option value="first-item-basket" selected>Select a customer</option>
+                                </select>
+                                <div class="mt-2"><button type="button" onclick="proceedDisposal()"
+                                        class="btn btn-outline-dark" style="width: 100%;">Complete</button></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mt-3">
+                        <div class="kart" style="max-height: 400px;">
+                            <div class="container p-4">
+                                <p style="font-weight: 500;">Basket</p>
+                                <ol class="list-group list-group-numbered" id="basket-detail">
+                                    <p>Select a customer to see the basket.</p>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const iconSet = {
+            invalidAction: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/cancel.png"/>`,
+            userAdded: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/add--v1.png"/>`,
+            moneySent: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/circled-up-2.png"/>`,
+            userDeleted: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/trash--v1.png"/>`,
+            insufficientBalance: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/no-entry.png"/>`,
+            transactionCancelled: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/refresh--v1.png"/>`,
+            basketAdded: `<img class="historyIcon me-2" src="https://img.icons8.com/ios/50/000000/buy--v1.png"/>`
+        }
+
+        function padTo2Digits(num) {
+            return String(num).padStart(2, '0');
+        }
+
+        const idGenerator = function () { // creates a unique ID
+            return Math.ceil(Math.random() * 100000 - 1);
+        };
+
+        const state = { // state object
+            accountHolders: [],
+        };
+
+        const transactionState = { // transactional history state
+            transactionHistory: [],
+        }
+
+        const historyState = {
+            history: [],
+        }
+
+        function setHistoryState(stateName, newValue) { // sets the history state 
+            historyState[stateName] = newValue;
+        }
+
+        function dateMaker() {
+            const date = new Date();
+            const currentDate = padTo2Digits(date.getHours()) + ':' + padTo2Digits(date.getMinutes());
+            const currentDateSpan = `<span class="dateElement ms-3">${currentDate}</span>`;
+            return currentDateSpan
+        }
+
+        function newAccountHolder() { // creates a new account and adds to the state object
+            const accountHolder = document.getElementById("newAccountHolder").value; // gets the name from the input
+            const accountBalance = document.getElementById("newAccountBalance")
+                .value; // gets the balance from the input
+            if (accountHolder.trim().length === 0 || !accountBalance) { // checks if the form is valid
+                setHistoryState("history", [
+                    ...historyState.history, {
+                        message: `Invalid action!`,
+                        icon: iconSet.invalidAction,
+                        date: dateMaker(),
+                    }
+                ]);
+                renderHistoryList(historyState.history);
+                document.getElementById("newAccountHolder").style.backgroundColor =
+                    "#ffdddd"; // alerts user to enter a valid input
+                document.getElementById("newAccountBalance").style.backgroundColor =
+                    "#ffdddd"; // alerts user to enter a valid balance
+            } else {
+                document.getElementById("newAccountHolder").style.backgroundColor =
+                    ""; // clears the from validation alerts 
+                document.getElementById("newAccountBalance").style.backgroundColor =
+                    ""; // clears the from validation alerts 
+                setHistoryState("history", [
+                    ...historyState.history, {
+                        message: `${accountHolder[0].toUpperCase() + accountHolder.substring(1)} has been added to the account list with the balance of ${accountBalance}₺.`,
+                        icon: iconSet.userAdded,
+                        date: dateMaker(),
+                    }
+                ]);
+                renderHistoryList(historyState.history);
+                const uniqueId = idGenerator()
+                setState("accountHolders", [ // updates the state with the given inputs
+                    ...state.accountHolders,
+                    {
+                        name: accountHolder[0].toUpperCase() + accountHolder.substring(1),
+                        balance: parseInt(accountBalance),
+                        accountId: uniqueId,
+                        basket: [],
+                        inventory: []
+                    },
+                ]);
+            }
+        }
+
+        const productList = [{
+            name: "Monstera",
+            stock: 24,
+            price: 184,
+            id: "0"
+        }, {
+            name: "Bird of Paradise",
+            stock: 18,
+            price: 100,
+            id: "1"
+        }, {
+            name: "Parlor Palm",
+            stock: 19,
+            price: 25,
+            id: "2"
+        }, {
+            name: "Chinese Fan Palm",
+            stock: 3,
+            price: 33,
+            id: "3"
+        }, {
+            name: "Pachira",
+            stock: 10,
+            price: 25,
+            id: "4"
+        }, {
+            name: "Dracaena Gold Star",
+            stock: 5,
+            price: 233,
+            id: "5"
+        }, ]
+
+        function renderProducts() {
+            const productsList = document.getElementById("products-list");
+            productsList.innerHTML = ""
+            productList.map(item => {
+                const liElement = document.createElement("li");
+                liElement.className =
+                    "list-group-item list-group-item-action d-flex justify-content-between align-items-start";
+                liElement.setAttribute("onclick", `renderProductDetail(${item.id})`);
+                liElement.innerHTML = `
+                 <div class="ms-2 me-auto">
+                 <div style="font-size:13px;">${item.name}</div>
+                ${item.price}₺
+                </div>
+                <span class="badge bg-success rounded-pill" style="font-size:12px; font-weight: 300;">${item.stock}</span>
+                `
+                productsList.appendChild(liElement);
+            })
+            renderProductDetail(0);
+        }
+        renderProducts();
+
+        function proceedDisposal() {
+            let total = 0;
+            const basketSelectElement = Array.from(document.getElementById("show-basket"));
+            const customerId = basketSelectElement.find(x => x.selected === true).value;
+            if (customerId === "first-item-basket") {
+                setHistoryState("history", [
+                    ...historyState.history, {
+                        message: `Invalid action!`,
+                        icon: iconSet.invalidAction,
+                        date: dateMaker(),
+                    }
+                ]);
+                renderHistoryList(historyState.history);
+            } else {
+                const customerBasket = state.accountHolders.find(x => x.accountId == customerId).basket;
+                if (customerBasket.length === 0) {
+                    setHistoryState("history", [
+                        ...historyState.history, {
+                            message: `Invalid action!`,
+                            icon: iconSet.invalidAction,
+                            date: dateMaker(),
+                        }
+                    ]);
+                    renderHistoryList(historyState.history);
+                } else {
+                    customerBasket.forEach(function (item) {
+                        total += item.price;
+                    });
+                    if (total > state.accountHolders.find(x => x.accountId == customerId).balance) {
+                        setHistoryState("history", [
+                            ...historyState.history, {
+                                message: `Not enough balance!`,
+                                icon: iconSet.invalidAction,
+                                date: dateMaker(),
+                            }
+                        ]);
+                        renderHistoryList(historyState.history);
+                    } else {
+                        customerBasket.forEach(function (item) {
+                            state.accountHolders.find(x => x.accountId == customerId).inventory.push(item);
+                            productList.find(x => x.name === item.name).stock -= 1;
+                            state.accountHolders.find(x => x.accountId == customerId).balance -= item.price
+                        });
+                        state.accountHolders.find(x => x.accountId == customerId).basket = [];
+                        renderProducts();
+                        renderAccountHolders(); // rerenders the account holder list
+                        renderToSelectTag(); // rerenders the select tags
+                        document.getElementById("basket-detail").innerHTML = "<p>Basket is empty.</p>";
+                        setHistoryState("history", [
+                            ...historyState.history, {
+                                message: `${total}₺ disposal proceeded from ${state.accountHolders.find(x => x.accountId == customerId).name}.`,
+                                icon: iconSet.moneySent,
+                                date: dateMaker(),
+                            }
+                        ]);
+                        renderHistoryList(historyState.history);
+                    }
+                }
+            }
+
+
+        }
+
+        function renderProductDetail(id) {
+            const showBasketSelect = Array.from(document.getElementById("show-basket"));
+            const productDetailDiv = document.getElementById("product-detail");
+            const targetProduct = productList.find(item => item.id == id);
+            if (targetProduct.stock == 0) {
+                productDetailDiv.innerHTML = ` <div class="d-flex justify-content-between align-items-center">
+                                    <span class="product-name">${targetProduct.name}</span><span
+                                        class="badge bg-danger undoBadge">Out of stock.</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="product-cost">${targetProduct.price}₺</span><span onClick="addToBasket(${targetProduct.id})"; style="text-decoration: underline; cursor: pointer;">Add to basket ></span>
+                                </div>`
+            } else {
+                productDetailDiv.innerHTML = ` <div class="d-flex justify-content-between align-items-center">
+                                    <span class="product-name">${targetProduct.name}</span><span
+                                        class="badge bg-danger undoBadge">Last ${targetProduct.stock} on stock</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="product-cost">${targetProduct.price}₺</span><span onClick="addToBasket(${targetProduct.id})"; style="text-decoration: underline; cursor: pointer;">Add to basket ></span>
+                                </div>`
+            }
+        }
+
+        function addToBasket(productId) {
+            const showBasketSelect = Array.from(document.getElementById("show-basket"));
+            const customerId = showBasketSelect.find(x => x.selected === true).value
+
+            const accountIndex = showBasketSelect.indexOf(showBasketSelect.find(x => x.selected === true)) - 1
+            const targetProduct = productList.find(item => item.id == productId);
+            if (accountIndex == -1) {
+                setHistoryState("history", [
+                    ...historyState.history, {
+                        message: `Invalid action!`,
+                        icon: iconSet.invalidAction,
+                        date: dateMaker(),
+                    }
+                ]);
+                renderHistoryList(historyState.history);
+            } else {
+                if (targetProduct.stock == 0) {
+                    setHistoryState("history", [
+                        ...historyState.history, {
+                            message: `${targetProduct.name} is out of stock!`,
+                            icon: iconSet.invalidAction,
+                            date: dateMaker(),
+                        }
+                    ]);
+                    renderHistoryList(historyState.history);
+                } else {
+                    if (state.accountHolders[accountIndex].basket.length == 0) {
+                        const basketObject = {
+                            name: targetProduct.name,
+                            price: targetProduct.price,
+                            id: targetProduct.id
+                        };
+                        state.accountHolders[accountIndex].basket.push(basketObject);
+                        setHistoryState("history", [
+                            ...historyState.history, {
+                                message: `${targetProduct.name} added to the ${state.accountHolders[accountIndex].name}'s basket`,
+                                icon: iconSet.basketAdded,
+                                date: dateMaker(),
+                            }
+                        ]);
+                        renderHistoryList(historyState.history);
+                        additionalRenderBasket(state.accountHolders[accountIndex].accountId);
+                    } else {
+                        const currentBasket = state.accountHolders.find(x => x.accountId == customerId).basket;
+
+                        const sameProducts = currentBasket.filter(x => x.id == productId);
+
+                        if (sameProducts.length >= targetProduct.stock) {
+                            setHistoryState("history", [
+                                ...historyState.history, {
+                                    message: `Total stock exceeded!`,
+                                    icon: iconSet.invalidAction,
+                                    date: dateMaker(),
+                                }
+                            ]);
+                            renderHistoryList(historyState.history);
+                        } else {
+                            const basketObject = {
+                                name: targetProduct.name,
+                                price: targetProduct.price,
+                                id: targetProduct.id
+                            };
+                            state.accountHolders[accountIndex].basket.push(basketObject);
+                            setHistoryState("history", [
+                                ...historyState.history, {
+                                    message: `${targetProduct.name} added to the ${state.accountHolders[accountIndex].name}'s basket`,
+                                    icon: iconSet.basketAdded,
+                                    date: dateMaker(),
+                                }
+                            ]);
+                            renderHistoryList(historyState.history);
+                            additionalRenderBasket(state.accountHolders[accountIndex].accountId);
+                        }
+
+                    }
+                }
+            }
+        }
+
+        function additionalRenderBasket(accountId) {
+            const basketList = document.getElementById("basket-detail");
+            const accountHolder = state.accountHolders.find(x => x.accountId == accountId);
+            if (accountHolder == undefined) {
+                basketList.innerHTML = `<p>Select a customer to see the basket</p>`
+            } else {
+                basketList.innerHTML = ""
+                accountHolder.basket.forEach(function (item) {
+                    const basketElement = document.createElement("li");
+                    basketElement.className = "list-group-item"
+                    basketElement.innerHTML = `${item.name} - ${item.price}`;
+                    basketList.appendChild(basketElement);
+                })
+            }
+
+        }
+
+        function fetchTransactions() {
+            const transactionHistorySelect = Array.from(document.getElementById("transaction-history-filter"));
+            const sendCheckBox = document.getElementById("send-checkbox");
+            const receivedCheckBox = document.getElementById("received-checkbox");
+            const customerId = transactionHistorySelect.find(x => x.selected === true).id
+
+            if (customerId === "first-item") {
+                transactionHistoryError(`Please select a customer.`);
+            }
+            if (customerId !== "first-item" & sendCheckBox.checked === false &
+                receivedCheckBox
+                .checked === false) {
+                transactionHistoryError(`Please select an option`);
+            }
+            if (customerId !== "first-item" & sendCheckBox.checked === true &
+                receivedCheckBox
+                .checked === false) {
+                renderToTransactionHistory(parseInt(customerId), true, false)
+            }
+            if (customerId !== "first-item" & sendCheckBox.checked === false &
+                receivedCheckBox
+                .checked === true) {
+                renderToTransactionHistory(parseInt(customerId), false, true)
+            }
+            if (customerId !== "first-item" & sendCheckBox.checked === true &
+                receivedCheckBox
+                .checked === true) {
+                renderToTransactionHistory(parseInt(customerId), true, true)
+            }
+
+        }
+
+        function renderReceivingHistory(id) {
+            transactionState.transactionHistory.map(function (item) {
+                if (item.moneyReceiverId === id) {
+                    const newItemList = document.createElement("li");
+                    newItemList.innerHTML =
+                        `${item.moneyReceiverName} received ${item.transactionAmount}₺ from ${item.moneySenderName} at ${item.currentDate}`;
+                    newItemList.className = "list-group-item transaction-history"
+                    transactionalHistoryElement.appendChild(newItemList);
+                } else {
+                    return
+                }
+            })
+        }
+
+
+
+        function renderSendingHistory(id) {
+            transactionState.transactionHistory.map(function (item) {
+                if (item.moneySenderId === id) {
+                    const newItemList = document.createElement("li");
+                    newItemList.innerHTML =
+                        `${item.moneySenderName} sent ${item.transactionAmount}₺ to ${item.moneyReceiverName} at ${item.currentDate}`;
+                    newItemList.className = "list-group-item transaction-history"
+                    transactionalHistoryElement.appendChild(newItemList);
+                } else {
+                    return
+                }
+            })
+        }
+
+
+        function renderToTransactionHistory(id, send, receive) {
+            transactionalHistoryElement = document.getElementById("transaction-history");
+            transactionalHistoryElement.innerHTML = "";
+            if (send === false & receive === true) {
+                if (!transactionState.transactionHistory.find(x => x.moneyReceiverId === id)) {
+                    transactionHistoryError(`No transaction history`);
+                } else {
+                    renderReceivingHistory(id)
+                }
+            }
+            if (send === true & receive === false) {
+                if (!transactionState.transactionHistory.find(x => x.moneySenderId === id)) {
+                    transactionHistoryError(`No transaction history`);
+                } else {
+                    renderSendingHistory(id)
+                }
+            }
+            if (send === true & receive === true) {
+                if (!transactionState.transactionHistory.find(x => x.moneySenderId === id) & !transactionState
+                    .transactionHistory.find(x => x.moneyReceiverId === id)) {
+                    transactionHistoryError(`No transaction history`);
+                }
+                if (transactionState.transactionHistory.find(x => x.moneySenderId === id) & !transactionState
+                    .transactionHistory.find(x => x.moneyReceiverId === id)) {
+                    transactionHistoryError(`No sending history found`);
+                    renderReceivingHistory(id);
+                }
+                if (!transactionState.transactionHistory.find(x => x.moneySenderId === id) & transactionState
+                    .transactionHistory.find(x => x.moneyReceiverId === id)) {
+                    transactionHistoryError(`No receiving history found`);
+                    renderSendingHistory(id);
+                } else {
+                    renderSendingHistory(id);
+                    renderReceivingHistory(id);
+                }
+            }
+        }
+
+        function transactionHistoryError(msg) {
+            transactionalHistoryElement = document.getElementById("transaction-history");
+            transactionalHistoryElement.innerHTML = "";
+            errorMessage = document.createElement("li");
+            errorMessage.innerHTML = msg;
+            errorMessage.className = "list-group-item transaction-history-error";
+            transactionalHistoryElement.appendChild(errorMessage);
+        }
+
+        function setState(stateName, newValue) { // state update function,
+            state[stateName] = newValue;
+            renderAccountHolders(); // renders the accountants list
+            renderToSelectTag(); // renders a list of option tags inside the select tag for transactions
+            const accountHolder = document.getElementById("newAccountHolder").value = ""; // empties the name input
+            const accountBalance = document.getElementById("newAccountBalance").value = ""; // empties the balance input
+        }
+
+        function renderAccountHolders() { // renders the account holders list
+            const accountHoldersList = [document.getElementById(
+                "account-holders-list")]; // gets the account holders ul element from the dom
+            accountHoldersList.forEach(function (
+                accountHolder) { // iterates the ul element to create li elements inside
+                accountHolder.innerHTML = ""; // clears the existing entries on every new render
+                listAccounts(state.accountHolders,
+                    accountHolder); // adds li elements with respect to the account holders
+            })
+        }
+
+        function renderToSelectTag() { // renders a list of option tags inside the select tag for transactions
+            const accountHoldersList = [document.getElementById("send-to-account-holder-list"), document.getElementById(
+                "from-the-account-holder-list"), document.getElementById(
+                "transaction-history-filter"), document.getElementById(
+                "show-basket")]; // gets the respective select elements from the dom
+
+            accountHoldersList.forEach(function (
+                accountHolder) { // iterates the select element to create option elements inside
+                if (accountHolder.getAttribute("id") ===
+                    "send-to-account-holder-list") { // picks the senders select element
+
+                    accountHolder.innerHTML = "<option selected>To</option>"; // creates a placeholder for UX
+                    selectAccounts(state.accountHolders,
+                        accountHolder); // adds select elements with respect to the account holders
+                }
+                if (accountHolder.getAttribute("id") ===
+                    "from-the-account-holder-list") { // picks the receivers select element
+                    accountHolder.innerHTML = "<option selected>From</option>"; // creates a placeholder for UX
+                    selectAccounts(state.accountHolders,
+                        accountHolder); // adds select elements with respect to the account holders
+                }
+                if (accountHolder.getAttribute("id") ===
+                    "transaction-history-filter") { // picks the receivers select element
+
+                    accountHolder.innerHTML =
+                        '<option selected>Select a customer</option>'; // creates a placeholder for UX
+                    selectAccounts(state.accountHolders,
+                        accountHolder); // adds select elements with respect to the account holders
+                }
+                if (accountHolder.getAttribute("id") ===
+                    "show-basket") { // picks the receivers select element
+
+                    accountHolder.innerHTML =
+                        '<option value="first-item-basket" selected>Select a customer</option>'; // creates a placeholder for UX
+                    selectBasketAccounts(state.accountHolders,
+                        accountHolder); // adds select elements with respect to the account holders
+                }
+            })
+        }
+
+        function listAccounts(list, accountHolder) { // creates a new li element for the list of account holders
+            list.forEach(function (
+                item, index
+            ) { // iterates the account holders list and creates a li element for every account holder
+                const newListItem = document.createElement("li"); // creates a li element
+                newListItem.id = index;
+                const listId = idGenerator(); // creates a unique id for the li element
+                newListItem.innerHTML = "<span>" + item.name + " " + `<svg width="13" height="13" fill="#E74C3C" onClick="deleteUser(${index})" class="bi bi-x-circle-fill align-middle" style="cursor:pointer;" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+</svg>` + "</span>" + "<span>" + item.balance +
+                    " ₺</span>"; // renders the account holders name and the current balance
+                newListItem.setAttribute("data-id", listId); // assigns the id to the li element
+                newListItem.className =
+                    "list-group-item d-flex justify-content-between align-items-center"; // adds the respective bootstrap class to the li element
+                accountHolder.appendChild(
+                    newListItem); // adds the created li element inside to the account holders list
+            })
+        }
+
+
+
+        function renderHistoryList(list) {
+
+            document.getElementById("history-list").innerHTML = ""
+
+            list.forEach((item) => {
+                const historyList = document.getElementById("history-list");
+                const historyData = document.createElement("li");
+                historyData.innerHTML = '<span class="history">' + item.icon + item.message + "</span>" +
+                    item
+                    .date;
+                historyData.className =
+                    "list-group-item d-flex justify-content-between align-items-center"; // adds the respective bootstrap class to the li element
+                const historyDataId = idGenerator(); // creates a unique id for the li element
+                historyData.setAttribute("data-id", historyDataId); // assigns the id to the li element
+                historyList.prepend(
+                    historyData); // adds the created li element inside to the history list ul element
+            })
+
+        }
+
+
+
+        function deleteUser(index) { // deletes a user from the current state
+            setHistoryState("history", [
+                ...historyState.history, {
+                    message: `${state.accountHolders[index].name} has been removed!`,
+                    icon: iconSet.userDeleted,
+                    date: dateMaker(),
+                }
+            ]);
+            renderHistoryList(historyState.history);
+            const accountId = state.accountHolders[index].accountId
+            state.accountHolders.splice(index, 1); // removes the targeted user from the state
+            renderAccountHolders(); // rerenders the account holder list
+            renderToSelectTag() // rerenders the select tags
+            additionalRenderBasket(accountId);
+
+        }
+
+        function selectAccounts(list,
+            accountHolder) { // creates a new option element for the select element for transactional purposes
+            list.forEach(function (
+                item
+            ) { // iterates the account holders list and creates a option element for every account holder
+                const newOptionItem = document.createElement("option"); // creates a new option element
+                const optionId = idGenerator(); // creates a unique id for the option element;
+                newOptionItem.value = item
+                    .balance // assigns the account holders balance to the value of the option element
+                newOptionItem.id = item.accountId;
+                newOptionItem.innerText = item.name; // adds the account holders name inside the option tag
+                newOptionItem.setAttribute("data-id", optionId); // assigns the id to the option element
+                accountHolder.appendChild(
+                    newOptionItem) // adds the created option element inside to the select element
+            })
+        }
+
+        function selectBasketAccounts(list,
+            accountHolder) { // creates a new option element for the select element for transactional purposes
+
+            list.forEach(function (
+                item
+            ) { // iterates the account holders list and creates a option element for every account holder
+                const newOptionItem = document.createElement("option"); // creates a new option element
+                const optionId = idGenerator(); // creates a unique id for the option element;
+                newOptionItem.value = item
+                    .accountId // assigns the account holders balance to the value of the option element
+                newOptionItem.id = optionId;
+                newOptionItem.innerText = item.name; // adds the account holders name inside the option tag
+                newOptionItem.setAttribute("data-id", optionId); // assigns the id to the option element
+                accountHolder.appendChild(
+                    newOptionItem) // adds the created option element inside to the select element
+            })
+        }
+
+        function renderBasketDetail(event) {
+            const accountHolderValue = event.target.value;
+            const basketList = document.getElementById("basket-detail");
+            const accountHolder = state.accountHolders.find(x => x.accountId == accountHolderValue);
+
+            if (accountHolderValue === "first-item-basket") {
+                basketList.innerHTML = `<p>Select a customer to see the basket.</p>`
+            } else {
+                basketList.innerHTML = ""
+                if (accountHolder.basket.length === 0) {
+                    basketList.innerHTML = `<p>Basket is empty.</p>`
+                } else {
+                    accountHolder.basket.forEach(function (item) {
+                        const basketElement = document.createElement("li");
+                        basketElement.className = "list-group-item"
+                        basketElement.innerHTML = `${item.name} - ${item.price}`;
+                        basketList.appendChild(basketElement);
+                    })
+                }
+
+            }
+
+        }
+
+
+
+
+        function transactionalAction() { // responsible from transactions
+            const moneySendingAccounts = Array.from(document.getElementById("from-the-account-holder-list")
+                .children); // creates a list of potential money out transfer 
+            const moneyReceivingAccounts = Array.from(document.getElementById("send-to-account-holder-list")
+                .children); // creates a list of potential money in transfer
+            const amountInput = document.getElementById("transactional-amount"); // gets the amount input from the dom
+            if (moneySendingAccounts.find(x => x.selected === true).innerText === "From" | (moneyReceivingAccounts.find(
+                    x => x.selected === true).innerText === "To") | amountInput.value ===
+                "") { // checks if the form is valid
+                setHistoryState("history", [
+                    ...historyState.history, {
+                        message: `Invalid action!`,
+                        icon: iconSet.invalidAction,
+                        date: dateMaker(),
+                    }
+                ]);
+                renderHistoryList(historyState.history);
+                document.getElementById("from-the-account-holder-list").style.backgroundColor =
+                    "#ffdddd"; // alerts user to select a valid option
+                document.getElementById("send-to-account-holder-list").style.backgroundColor =
+                    "#ffdddd"; // alerts user to select a valid option
+                amountInput.style.backgroundColor = "#ffdddd"; //alerts user to enter a valid input
+                return
+            } else {
+                document.getElementById("from-the-account-holder-list").style.backgroundColor =
+                    ""; // clears the from validation alerts 
+                document.getElementById("send-to-account-holder-list").style.backgroundColor =
+                    ""; // clears the from validation alerts 
+                amountInput.style.backgroundColor = ""; // clears the from validation alerts 
+                const moneySendingAccount = moneySendingAccounts.find(x => x.selected ===
+                    true); // finds the current selected option to transfer money out
+                const moneyReceivingAccount = moneyReceivingAccounts.find(x => x.selected ===
+                    true); // finds the current selected option to transfer money in
+                const moneySendingAccountIndex = moneySendingAccounts.indexOf(moneySendingAccount) -
+                    1; // finds the index of the current selected option to transfer money out
+                const moneyReceivingAccountIndex = moneyReceivingAccounts.indexOf(moneyReceivingAccount) -
+                    1; // finds the index of the current selected option to transfer money in
+                if (moneyReceivingAccountIndex ===
+                    moneySendingAccountIndex) { // checks if the selected accounts are the same
+                    setHistoryState("history", [
+                        ...historyState.history, {
+                            message: `Invalid action!`,
+                            icon: iconSet.invalidAction,
+                            date: dateMaker(),
+                        }
+                    ]);
+                    renderHistoryList(historyState.history);
+                    return;
+                } else {
+                    const moneySendingValue = parseInt(moneySendingAccount
+                        .value); // creates an integer from the selected option tags value to transfer money out
+                    const moneySenderId = state.accountHolders[moneySendingAccountIndex].accountId;
+                    const moneySenderName = state.accountHolders[moneySendingAccountIndex].name;
+                    const moneyReceiverId = state.accountHolders[moneyReceivingAccountIndex].accountId;
+                    const moneyReceiverName = state.accountHolders[moneyReceivingAccountIndex].name;
+                    const moneyReceivingValue = parseInt(moneyReceivingAccount
+                        .value); // creates an integer from the selected option tags value to transfer money in
+                    const transactionAmount = parseInt(amountInput
+                        .value); // creates an integer from the amount inputs value
+                    if (transactionAmount > moneySendingValue) {
+                        setHistoryState("history", [
+                            ...historyState.history, {
+                                message: `Insufficient balance!`,
+                                icon: iconSet.insufficientBalance,
+                                date: dateMaker(),
+                            }
+                        ]);
+                        renderHistoryList(historyState.history);
+
+                        return;
+                    } else {
+                        const badgeId = idGenerator();
+                        const date = new Date();
+                        const transactionTime = date.getTime();
+                        const currentDate = padTo2Digits(date.getHours()) + ':' + padTo2Digits(date.getMinutes());
+                        setTransactionState("transactionHistory",
+                            [ // updates the transactional history state with the given inputs
+                                ...transactionState.transactionHistory,
+                                {
+                                    transactionId: badgeId, // the id of the undo badge that is created
+                                    moneySenderId, // money senders id added to the transactional history state
+                                    moneyReceiverId, // money receivers id added to the transactional history state
+                                    transactionTime,
+                                    currentDate,
+                                    moneySenderName,
+                                    moneyReceiverName,
+                                    transactionAmount,
+                                },
+                            ]);
+                        setHistoryState("history", [
+                            ...historyState.history, {
+                                message: `${moneySendingAccount.innerText} just sent ${transactionAmount}₺ to ${moneyReceivingAccount.innerHTML}. <span class="badge bg-danger undoBadge ms-1" id="${badgeId}" onClick="undoTransaction(${badgeId}, ${transactionAmount}); this.remove();">Undo</span>`,
+                                icon: iconSet.moneySent,
+                                date: dateMaker(),
+                            }
+                        ]);
+                        renderHistoryList(historyState.history);
+                        state.accountHolders[moneySendingAccountIndex].balance = moneySendingValue -
+                            transactionAmount; // updates the state for the account holder that transferred money out
+                        state.accountHolders[moneyReceivingAccountIndex].balance = moneyReceivingValue +
+                            transactionAmount; // updates the state for the account that is transferred money in
+                        renderAccountHolders(); // renders the updated account holders list 
+                        renderToSelectTag
+                            (); // renders the updated list of option tags inside the select tag for transactions
+                        amountInput.value = "";
+                    }
+
+                }
+
+            }
+
+        }
+
+        function setTransactionState(stateName, newValue) { // sets the transactional history state 
+            transactionState[stateName] = newValue;
+        }
+
+        function undoTransaction(badgeId, transactionAmount) { // undoes the clicked transaction
+            const currentAction = transactionState.transactionHistory.filter(x => x.transactionId ===
+                badgeId); // finds the corresponding transaction with the given badge id
+            if (state.accountHolders.some(x => x.accountId === currentAction[0].moneySenderId) & state.accountHolders
+                .some(x => x.accountId === currentAction[0].moneyReceiverId)
+            ) { // checks if the users are still in the account holder list 
+                state.accountHolders.find(x => x.accountId === currentAction[0].moneySenderId).balance +=
+                    transactionAmount; // undoes the transaction
+                state.accountHolders.find(x => x.accountId === currentAction[0].moneyReceiverId).balance -=
+                    transactionAmount; // undoes the transaction
+
+                setHistoryState("history", [
+                    ...historyState.history, {
+                        message: `Transfer cancelled.`,
+                        icon: iconSet.transactionCancelled,
+                        date: dateMaker(),
+                    }
+                ]);
+                renderHistoryList(historyState.history);
+                document.getElementById(badgeId).innerHTML = ""
+                renderToSelectTag(); // rerenders the select tag
+                renderAccountHolders(); // rerenders the account holders list
+            } else {
+                setHistoryState("history", [
+                    ...historyState.history, {
+                        message: `Invalid action!`,
+                        icon: iconSet.invalidAction,
+                        date: dateMaker(),
+                    }
+                ]);
+                renderHistoryList(historyState.history);
+            }
+        }
+    </script>
+</body>
+
+</html>
